@@ -498,6 +498,34 @@ for (auto i = 0; i < 500; ++i) {
       \end{center}
         \end{frame}  
   
+    \begin{frame}{Changement de formats}
+  Utiliser des doubles au lieu de floats, voir des quadruples sur des architectures qui le permettent. \\
+  Inconvénients :
+  \begin{itemize}
+  \item Réécriture ou modifications de codes sources
+  \item Perte importante de performance (bande passante)
+  \item Pas de certitude quant à la validité/stabilité des résultats
+  \end{itemize} 
+  \end{frame}
+  
+  \begin{frame}{float vs double}
+  $333.75*b^{6}+a^{2}*(11.0*a^{2}*b^{2}-b^{6}-121.0*b^{4}-2)+5.5*b^{8}+a/(2.0*b)$
+      \begin{itemize}
+\item float : $6.3382530011411470075*10^{29}$
+\item double : $1.1726039400531786949$
+\item \textcolor{white}{ } 
+    \end{itemize}
+  \end{frame}
+  
+  \begin{frame}{float vs double}
+  $333.75*b^{6}+a^{2}*(11.0*a^{2}*b^{2}-b^{6}-121.0*b^{4}-2)+5.5*b^{8}+a/(2.0*b)$
+      \begin{itemize}
+\item float : $6.3382530011411470075*10^{29}$
+\item double : $1.1726039400531786949$
+\item real :  -0.82739605994682
+    \end{itemize}
+  \end{frame}  
+  
 \defverbatim[colored]\errorcomputing{
 \begin{lstlisting}[language=C++,basicstyle=\ttfamily,keywordstyle=\color{blue}]
 float error_from_addition(float a, float b) {
@@ -525,6 +553,8 @@ float error_from_addition(float a, float b) {
     \end{itemize}
   \end{frame}
   
+
+  
   \begin{frame}{Recherche}
 La stabilité numérique est un champ de recherche à lui seul. Pour les analyses, plusieurs méthodes existent : 
 \begin{itemize}
@@ -532,77 +562,6 @@ La stabilité numérique est un champ de recherche à lui seul. Pour les analyse
 \item Calcul d'intervalles (opérations sur les arrondis et troncatures, puis min/max de chaque)
 \item Propagation d'erreurs (calcul des rests d'arrondis et propagation dans le code)
 \end{itemize}
-  \end{frame}
-    
-  
-    \begin{frame}{Changement de formats}
-  Utiliser des doubles au lieu de floats, voir des quadruples sur des architectures qui le permettent. \\
-  Inconvénients :
-  \begin{itemize}
-  \item Réécriture ou modifications de codes sources
-  \item Perte importante de performance (bande passante)
-  \item Pas de certitude quant à la validité/stabilité des résultats
-  \end{itemize} 
-  \end{frame}
-  
-\begin{frame}{float vs double}
-$333.75*b^{6}+a^{2}*(11.0*a^{2}*b^{2}-b^{6}-121.0*b^{4}-2)+5.5*b^{8}+a/(2.0*b)$
-\end{frame}  
-  
-  \defverbatim[colored]\ffwithpow{
-\begin{lstlisting}[language=C++,basicstyle=\ttfamily,keywordstyle=\color{blue}]
-template <typename T>
-T f(T a, T b) {
-  return T{333.75}*b*b*b*b*b*b+a*a*
-  (T{11.0}*a*a*b*b-b*b*b*b*b*b
-  -T{121.0}*b*b*b*b-T{2.0})
-  +T{5.5}*b*b*b*b*b*b*b*b+a/(T{2.0}*b);
-}
-template <typename T>
-T f_with_pow(T a, T b) {
-  return T{333.75}*pow(b,6)+pow(a,2)*
-  (T{11.0}*pow(a,2)*pow(b,2)-pow(b,6)
-  -T{121.0}*pow(b,4)-T{2.0})
-  +T{5.5}*pow(b,8)+a/(T{2.0}*b);
-}
-\end{lstlisting}
-}  
-  
-\begin{frame}{float vs double}
-\ffwithpow
-\end{frame}
-
-  \defverbatim[colored]\floatvsdouble{
-\begin{lstlisting}[language=C++,basicstyle=\ttfamily,keywordstyle=\color{blue}]
-f<float>(77617.0, 33096.0)
-f_with_pow<float>(77617.0, 33096.0)
-f<double>(77617.0, 33096.0)
-f_with_pow<double>(77617.0, 33096.0)
-\end{lstlisting}
-} 
-  
-  \begin{frame}{float vs double}
-\floatvsdouble
-\end{frame}
-  
-  \begin{frame}{float vs double}
-      \begin{itemize}
-\item float : $6.3382530011411470075*10^{29}$
-\item float with pow :  $-6.3382530011411470075*10^{29}$
-\item double : $1.1726039400531786949$
-\item double with pow : $-1.1805916207174113034*10^{21}$
-\item \textcolor{white}{ } 
-    \end{itemize}
-  \end{frame}
-  
-  \begin{frame}{float vs double}
-      \begin{itemize}
-\item float : $6.3382530011411470075*10^{29}$
-\item float with pow :  $-6.3382530011411470075*10^{29}$
-\item double : $1.1726039400531786949$
-\item double with pow : $-1.1805916207174113034*10^{21}$
-\item real :  -0.82739605994682
-    \end{itemize}
   \end{frame}  
   
     \begin{frame}{Outil : CADNA}
